@@ -3,6 +3,7 @@ import { component$, useStore, useResource$, Resource } from '@builder.io/qwik';
 import { UITemplate } from '~/components/UITemplates';
 import { UIOrganism } from '~/components/UIOrganism';
 import { UIAtom } from '~/components/UIAtom';
+import { FEATURED_MODELS, AI_CATEGORIES } from '~/mocks/data';
 
 const FEATUREDMODEL = [
   { id: '1', rank: 1, modelName: 'Llama 2 70B', performanceChange: '+15.2%' },
@@ -46,7 +47,6 @@ export default component$(() => {
   });
 
   return (
-    <UITemplate type="page">
       <Resource
         value={homeDataResource}
         onPending={() => <UIAtom type="loader" />}
@@ -58,42 +58,42 @@ export default component$(() => {
           store.stats = res.stats;
 
           return (
-            <div class="space-y-12">
+            <div class="space-y-16">
               {/* Hero Section */}
-              <UIOrganism type="hero" />
+              <UIOrganism type="hero" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
 
               {/* Trending Models */}
-              <section class="container mx-auto">
-                <h2 class="text-2xl font-bold mb-4 text-light">
+              <section class="container my-auto mx-auto p-4 mb-16">
+                <h2 class="text-2xl font-bold my-auto mb-6 text-light">
                   Trending AI Models
                 </h2>
                 <UIOrganism type="trending-models" data={store.trendingModels} />
               </section>
 
               {/* Featured Models */}
-              <section class="container mx-auto">
-                <h2 class="text-2xl font-bold mb-4 text-light">
+              <section class="container mx-auto p-4 mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-light">
                   Featured Models
                 </h2>
                 <UIOrganism type="featured-models" data={store.featuredModels} />
               </section>
 
               {/* Stats */}
-              <section class="container mx-auto">
+              <section class="container mx-auto p-4 mb-16">
                 <UIOrganism type="stats" data={store.stats} />
               </section>
 
               {/* Editors' Choice */}
-              <section class="container mx-auto">
-                <h2 class="text-2xl font-bold mb-4 text-light">
+              <section class="container mx-auto p-4 mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-light">
                   Editors’ Choice
                 </h2>
                 <UIOrganism type="leaderboard" />
               </section>
 
               {/* Categories */}
-              <section class="container mx-auto">
-                <h2 class="text-2xl font-bold mb-4 text-light">
+              <section class="container mx-auto p-4 mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-light">
                   Explore Categories
                 </h2>
                 <UIOrganism type="category-grid" />
@@ -102,7 +102,6 @@ export default component$(() => {
           );
         }}
       />
-    </UITemplate>
   );
 });
 

@@ -1,9 +1,9 @@
 import { component$ } from '@builder.io/qwik';
-import PageLayout from '~/components/templates/PageLayout/PageLayout';
+import { UITemplate } from '~/components/UITemplates';
 
 export default component$(() => {
   return (
-    <PageLayout title="Terms of Service">
+    <UITemplate type="page" title="Terms of Service">
       <div class="terms-page space-y-6">
         {/* Anchor Links */}
         <div class="anchor-links space-x-4 mb-4">
@@ -44,6 +44,6 @@ export default component$(() => {
           <p>For questions about these terms, please contact us at <a href="mailto:support@aiwebstore.com" class="text-blue-600 underline">support@aiwebstore.com</a>.</p>
         </section>
       </div>
-    </PageLayout>
+    </UITemplate>
   );
 });

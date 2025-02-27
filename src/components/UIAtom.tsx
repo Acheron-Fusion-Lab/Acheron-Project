@@ -1,4 +1,4 @@
-import { component$, Slot, useSignal, useTask$ } from '@builder.io/qwik';
+import { component$, Slot, useSignal, useTask$, $ } from '@builder.io/qwik';
 
 interface UIAtomProps {
   type:
@@ -77,6 +77,14 @@ export const UIAtom = component$<UIAtomProps>(({
     'verified': <path d="M20 6L9 17l-5-5" fill="blue" />,
   };
 
+  const handleChange$ = $((value: string | number | [number, number]) => {
+    if (onChange$) onChange$(value);
+  });
+
+  const handleClick$ = $(() => {
+    if (onClick$) onClick$();
+  });
+
   return (
     <>
       {type === 'slider' && (
@@ -87,7 +95,7 @@ export const UIAtom = component$<UIAtomProps>(({
             max={100}
             value={val.value as number}
             class="w-full h-1 rounded-lg bg-gray-300 accent-blue-500 focus:outline-none transition-colors"
-            onChange$={(e) => val.value = parseFloat((e.target as HTMLInputElement).value)}
+            onChange$={(e) => handleChange$(parseFloat((e.target as HTMLInputElement).value))}
           />
           <div class="mt-1 text-xs text-gray-600 text-center font-medium">{val.value}%</div>
         </div>
@@ -112,7 +120,7 @@ export const UIAtom = component$<UIAtomProps>(({
             class="absolute w-full top-1 h-1 bg-transparent appearance-none focus:outline-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-500 transition"
             onInput$={(e) => {
               const newMin = Math.min(Number((e.target as HTMLInputElement).value), (val.value as [number, number])[1] - 1);
-              val.value = [newMin, (val.value as [number, number])[1]];
+              handleChange$([newMin, (val.value as [number, number])[1]]);
             }}
           />
           <input
@@ -123,7 +131,7 @@ export const UIAtom = component$<UIAtomProps>(({
             class="absolute w-full top-1 h-1 bg-transparent appearance-none focus:outline-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-500 transition"
             onInput$={(e) => {
               const newMax = Math.max(Number((e.target as HTMLInputElement).value), (val.value as [number, number])[0] + 1);
-              val.value = [(val.value as [number, number])[0], newMax];
+              handleChange$([(val.value as [number, number])[0], newMax]);
             }}
           />
           <div class="mt-4 flex justify-between text-xs text-gray-600 font-medium">
@@ -136,7 +144,7 @@ export const UIAtom = component$<UIAtomProps>(({
       {type === 'button' && (
         <button
           class={`px-4 py-2 bg-white border border-gray-300 text-gray-800 rounded-md shadow-sm hover:bg-gray-50 transition ${className}`}
-          onClick$={onClick$}
+          onClick$={handleClick$}
         >
           {label || <Slot />}
         </button>
@@ -145,7 +153,7 @@ export const UIAtom = component$<UIAtomProps>(({
       {type === 'fab' && (
         <button
           class={`fixed bottom-6 right-6 p-4 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition ${className}`}
-          onClick$={onClick$}
+          onClick$={handleClick$}
         >
           {label || '+'}
         </button>
@@ -154,7 +162,7 @@ export const UIAtom = component$<UIAtomProps>(({
       {type === 'icon-button' && (
         <button
           class={`flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 transition ${className}`}
-          onClick$={onClick$}
+          onClick$={handleClick$}
           aria-label={label}
         >
           {icon && <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">{icons[icon]}</svg>}
@@ -177,7 +185,7 @@ export const UIAtom = component$<UIAtomProps>(({
         <select
           class={`w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${className}`}
           value={val.value as string}
-          onChange$={(e) => val.value = (e.target as HTMLSelectElement).value}
+          onChange$={(e) => handleChange$((e.target as HTMLSelectElement).value)}
         >
           {['', 'nlp', 'cv', 'rl', 'other'].map((opt) => (
             <option key={opt} value={opt}>{opt || 'All'}</option>

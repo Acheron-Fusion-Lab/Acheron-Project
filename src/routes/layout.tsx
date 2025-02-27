@@ -5,7 +5,7 @@ import { UIOrganism } from '~/components/UIOrganism';
 
 export default component$(() => {
   return (
-    <UITemplate type="page">
+    <>
       {/* Header - Inspired by Epic Games: Bold, dynamic */}
       <UIOrganism type="header" />
 
@@ -16,6 +16,6 @@ export default component$(() => {
 
       {/* Footer - Inspired by CoinMarketCap: Minimal, functional */}
       <UIOrganism type="footer" />
-    </UITemplate>
+    </>
   );
 });

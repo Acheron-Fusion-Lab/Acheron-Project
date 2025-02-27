@@ -1,5 +1,6 @@
 // src/components/organisms/UIOrganism.tsx 
 import { component$, useSignal, $, HTMLAttributes, QwikJSX } from '@builder.io/qwik';
+import { FEATURED_MODELS, AI_CATEGORIES } from '~/mocks/data';
 // Fix 1: Remove useDocumentHead import
 
 interface UIOrganismProps {
@@ -255,30 +256,58 @@ export const UIOrganism = component$<UIOrganismProps>(({
   </header>
 )}
 
-
 {type === 'hero' && (
-  <div class="bg-white py-8">
-    {/* Centered Headline */}
-    <div class="text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-800">Just introduced. Discover the latest AI models.</h1>
-      <div class="w-16 h-1 bg-gray-300 mx-auto mt-4"></div>
+  <div class="py-16 relative ">
+    {/* Categories Navigation */}
+    <div class="overflow-x-auto no-scrollbar sticky top-0">
+      <div class="flex justify-center space-x-8 px-6 py-4 max-w-7xl mx-auto">
+        {AI_CATEGORIES?.map((category) => (
+          <a
+            key={category.id}
+            href={category.link}
+            class="flex flex-col items-center group min-w-[64px] hover:opacity-100 opacity-60 transition-opacity"
+          >
+            <div class="w-12 h-12 mb-2 rounded-2xl bg-gray-50 flex items-center justify-center">
+              <img
+                src={category.icon}
+                alt={category.name}
+                class="w-8 h-8 object-contain"
+              />
+            </div>
+            <span class="text-xs font-medium text-gray-800">{category.name}</span>
+          </a>
+        ))}
+      </div>
     </div>
 
-    {/* Grid of Cards */}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
-      {Array.isArray(data) && data.map((item, index) => (
-        <div key={index} class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
-          {/* Image */}
-          <img src={item.image} alt={item.headline} class="w-full h-48 object-cover rounded-md mb-4" />
+    {/* Centered Headline */}
+    <div class="text-center mb-12 mt-8">
+      <h1 class="text-3xl font-bold text-gray-800">Discover the latest AI models.</h1>
+    </div>
 
-          {/* Headline */}
-          <h2 class="text-xl font-bold text-gray-800 mb-2">{item.headline}</h2>
-
-          {/* Subheadline */}
-          <p class="text-sm text-gray-600 mb-4">{item.subheadline}</p>
-
-          {/* CTA Button */}
-          <a href={item.ctaLink} class="inline-block px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+    {/* Grid of Featured Models */}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto px-4 pb-16">
+      {FEATURED_MODELS?.map((item, index) => (
+        <div key={index} class="group bg-gray-50 rounded-2xl p-6 hover:shadow-md transition-shadow">
+          {item.tag && (
+            <span class="inline-block px-3 py-1 text-xs font-medium bg-gray-900 text-white rounded-full mb-4">
+              {item.tag}
+            </span>
+          )}
+          <h2 class="text-2xl font-semibold text-gray-900 mb-2">{item.headline}</h2>
+          <p class="text-sm text-gray-600 mb-2">{item.subheadline}</p>
+          {item.price && (
+            <p class="text-sm text-gray-500 mb-4">{item.price}</p>
+          )}
+          <img
+            src={item.image}
+            alt={item.headline}
+            class="w-full h-48 object-contain transform group-hover:scale-105 transition-transform duration-300"
+          />
+          <a
+            href={item.ctaLink}
+            class="inline-block mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+          >
             {item.ctaText}
           </a>
         </div>
@@ -286,7 +315,7 @@ export const UIOrganism = component$<UIOrganismProps>(({
     </div>
   </div>
 )}
-
+ 
       {type === 'leaderboard' && (
         <div class="overflow-x-auto">
           <table class="w-full border text-xs">

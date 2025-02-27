@@ -77,3 +77,33 @@ export const mockModels: Model[] = [
   },
   // Add more mock models as needed
 ];
+
+export const AI_CATEGORIES = [
+  { id: '1', name: 'Language Models', icon: '/icons/language.png', link: '/categories/language' },
+  { id: '2', name: 'Computer Vision', icon: '/icons/vision.png', link: '/categories/vision' },
+  { id: '3', name: 'Generative Models', icon: '/icons/generative.png', link: '/categories/generative' },
+  { id: '4', name: 'Reinforcement Learning', icon: '/icons/reinforcement.png', link: '/categories/reinforcement' },
+  // Add more relevant AI categories
+];
+
+export const FEATURED_MODELS = [
+  {
+    id: '1',
+    tag: 'NEW',
+    headline: 'GPT-4',
+    subheadline: 'The latest language model from OpenAI.',
+    price: 'From $0.03 per 1K tokens',
+    image: '/images/gpt4.png',
+    ctaText: 'Learn More',
+    ctaLink: '/models/gpt4'
+  },
+  {
+    id: '2',
+    headline: 'DALL-E 3',
+    subheadline: 'Advanced image generation model.',
+    image: '/images/dalle3.png',
+    ctaText: 'Explore',
+    ctaLink: '/models/dalle3'
+  },
+  // Add more AI models
+];

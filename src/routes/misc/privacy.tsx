@@ -1,9 +1,9 @@
-import { component$, Slot } from '@builder.io/qwik';
-import PageLayout from '~/components/templates/PageLayout/PageLayout';
+import { component$ } from '@builder.io/qwik';
+import { UITemplate } from '~/components/UITemplates';
 
 export default component$(() => {
   return (
-    <PageLayout title="Privacy Policy">
+    <UITemplate type="page" title="Privacy Policy">
       <div class="privacy-page space-y-6">
         {/* Introduction */}
         <section>
@@ -39,6 +39,6 @@ export default component$(() => {
           <p>We will notify you of any changes to this policy via email or a site announcement.</p>
         </section>
       </div>
-    </PageLayout>
+    </UITemplate>
   );
 });

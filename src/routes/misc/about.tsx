@@ -1,6 +1,6 @@
 import { component$, useSignal, useTask$ } from '@builder.io/qwik';
-import PageLayout from '~/components/templates/PageLayout/PageLayout';
-import { StatCard } from '~/components/molecules/StatCard/StatCard';
+import { UITemplate } from '~/components/UITemplates';
+import { UIMolecule } from '~/components/UIMolecules';
 
 interface HeroSectionProps {
   title: string;
@@ -113,7 +113,7 @@ export default component$(() => {
   });
 
   return (
-    <PageLayout title="About Us">
+    <UITemplate type="page">
       <div class="about-page">
         {/* Hero Section */}
         <HeroSection
@@ -162,9 +162,9 @@ export default component$(() => {
             <div class="text-center text-red-500">{error.value}</div>
           ) : (
             <div class="stats-grid grid grid-cols-1 md:grid-cols-3 gap-4">
-              <StatCard label="AI Models" value={stats.value.totalModels} />
-              <StatCard label="Active Labs" value={stats.value.activeLabs} />
-              <StatCard label="User Engagement" value={stats.value.userEngagement} />
+              <UIMolecule type="stat" label="AI Models" value={stats.value.totalModels} />
+              <UIMolecule type="stat" label="Active Labs" value={stats.value.activeLabs} />
+              <UIMolecule type="stat" label="User Engagement" value={stats.value.userEngagement} />
             </div>
           )}
         </div>
@@ -177,6 +177,6 @@ export default component$(() => {
           </a>
         </div>
       </div>
-    </PageLayout>
+    </UITemplate>
   );
 });

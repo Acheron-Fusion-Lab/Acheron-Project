@@ -1,21 +1,22 @@
 import { component$, useStore, useResource$, Resource, $ } from '@builder.io/qwik';
-import { Header } from '~/components/organisms/Header/Header';
-import { Footer } from '~/components/organisms/Footer/Footer';
-import { PlayaroundOptions } from '~/components/templates/PlaygroundLayout/playaround-options/playaround-options';
-import { PlayaroundOutput } from '~/components/templates/PlaygroundLayout/playaround-output/playaround-output';
-import { ModelSelector } from '~/components/features/model-playground/Selector/ModelSelector';
+import { UITemplate } from '~/components/UITemplates';
+import { UIOrganism } from '~/components/UIOrganism';
+
+interface Model {
+  id: string;
+  name: string;
+}
 
 export default component$(() => {
   // State store for customization options
   const store = useStore({
-    modelType: 'GPT-4',
-    responseSpeed: 'fast',
-    temperature: 0.7,
-    contextLength: 2048,
-    outputFormat: 'text',
-    selectedModel: '',      // For user’s model selection from the list
-    userPrompt: '',         // The text input from the user
-    response: '',           // The AI response
+    selectedModel: '',
+    userPrompt: '',
+    response: '',
+    options: {
+      temperature: 0.7,
+      maxTokens: 100
+    }
   });
 
   // Resource to fetch the list of available models
@@ -27,18 +28,18 @@ export default component$(() => {
     return res.json();
   });
 
-  // Function to handle user prompt submission (fixed with $())
-  const handleSubmit = $(async () => {
+  const handleModelSelect$ = $((model: Model) => {
+    store.selectedModel = model.id;
+  });
+
+  const handleSubmit$ = $(async () => {
     try {
       const res = await fetch('/api/playaround', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: store.selectedModel || store.modelType,
-          responseSpeed: store.responseSpeed,
-          temperature: store.temperature,
-          contextLength: store.contextLength,
-          outputFormat: store.outputFormat,
+          model: store.selectedModel,
+          options: store.options,
           prompt: store.userPrompt,
         }),
       });
@@ -50,52 +51,47 @@ export default component$(() => {
   });
 
   return (
-    <>
-    <Header />
-    <div class="flex flex-col md:flex-row min-h-screen">
-      {/* Left Panel: Model list & customizations */}
-      <aside class="md:w-1/4 bg-gray-100 p-4 border-r">
-        <h1 class="text-xl font-bold mb-4">Playaround</h1>
+    <UITemplate type="playground">
+      <UIOrganism type="header" />
+      <div class="flex flex-col md:flex-row min-h-screen">
+        <aside class="md:w-1/4 bg-gray-100 p-4 border-r">
+          <h1 class="text-xl font-bold mb-4">Playaround</h1>
 
-        {/* Customization options above the model list */}
-        <PlayaroundOptions store={store} />
-
-        {/* Dynamic Model Selector */}
-        <Resource
-          value={modelsResource}
-          onPending={() => <p>Loading models...</p>}
-          onRejected={(error) => <p>Error: {error.message}</p>}
-          onResolved={(models: Array<string>) => (
-            <ModelSelector
-              models={models.map(model => ({ id: model, name: model }))}
-              onSelect$={(model: string) => store.selectedModel = model}
-            />
-          )}
-        />
-      </aside>
-
-      {/* Main Interaction Area */}
-      <main class="md:w-3/4 p-4">
-        <div class="mb-4">
-          <label class="block mb-2 font-semibold">Your Prompt</label>
-          <textarea
-            class="w-full p-2 border rounded"
-            rows={6}
-            value={store.userPrompt}
-            onInput$={(e) => (store.userPrompt = (e.target as HTMLTextAreaElement).value)}
+          <Resource
+            value={modelsResource}
+            onPending={() => <p>Loading models...</p>}
+            onRejected={(error) => <p>Error: {error.message}</p>}
+            onResolved={(models: Array<string>) => (
+              <UIOrganism
+                type="model-list"
+                models={models.map(model => ({ id: model, name: model }))}
+                onSelect$={handleModelSelect$}
+              />
+            )}
           />
-          <button
-            class="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-            onClick$={handleSubmit}  // ✅ Wrapped with $()
-          >
-            Send
-          </button>
-        </div>
+        </aside>
 
-        <PlayaroundOutput response={store.response} />
-      </main>
-    </div>
-    <Footer />
-    </>
+        <main class="md:w-3/4 p-4">
+          <div class="mb-4">
+            <label class="block mb-2 font-semibold">Your Prompt</label>
+            <textarea
+              class="w-full p-2 border rounded"
+              rows={6}
+              value={store.userPrompt}
+              onInput$={(e) => (store.userPrompt = (e.target as HTMLTextAreaElement).value)}
+            />
+            <button
+              class="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+              onClick$={handleSubmit$}
+            >
+              Send
+            </button>
+          </div>
+
+          <UIOrganism type="output" response={store.response} />
+        </main>
+      </div>
+      <UIOrganism type="footer" />
+    </UITemplate>
   );
 });

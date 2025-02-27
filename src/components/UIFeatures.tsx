@@ -1,4 +1,4 @@
-import { component$, useSignal, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useSignal, useStore, useTask$, $ } from '@builder.io/qwik';
 import { createClient } from '@supabase/supabase-js';
 
 interface UIFeatureProps {
@@ -78,7 +78,7 @@ export const UIFeature = component$<UIFeatureProps>(({
       : []
   );
 
-  useVisibleTask$(({ cleanup }) => {
+  useTask$(() => {
     if (type === 'rankings') {
       const channel = supabase
         .channel('lab_rankings')
@@ -96,7 +96,7 @@ export const UIFeature = component$<UIFeatureProps>(({
           }
         )
         .subscribe();
-      cleanup(() => supabase.removeChannel(channel));
+      return () => supabase.removeChannel(channel);
     }
   });
 
@@ -113,7 +113,7 @@ export const UIFeature = component$<UIFeatureProps>(({
   const CategoryCard = component$(({ category }: { category: Category }) => {
     return (
       <div class="p-4 bg-gray-800 rounded-lg shadow hover:bg-gray-700 transition">
-        <img src={category.icon_url} alt={category.name} class="w-16 h-16 rounded-full mb-2" />
+        <img src={category.icon_url} alt={category.name} class="w-16 h-16 rounded-full mb-2" width={50} height={50} />
         <h3 class="text-lg font-semibold text-white">{category.name}</h3>
         <p class="text-sm text-gray-300">{category.model_count} models</p>
       </div>
@@ -123,12 +123,15 @@ export const UIFeature = component$<UIFeatureProps>(({
   const Filter = component$(
     ({ currentFilter, onFilter$ }: { currentFilter: string; onFilter$: (f: string) => void }) => {
       const filters = ['all', 'domain1', 'domain2'];
+      const handleFilter$ = $((f: string) => {
+        if (onFilter$) onFilter$(f);
+      });
       return (
         <div class="p-4 bg-gray-800 rounded-lg shadow">
           {filters.map((filter) => (
             <button
               key={filter}
-              onClick$={() => onFilter$(filter)}
+              onClick$={() => handleFilter$(filter)}
               class={`px-4 py-2 rounded-lg transition ${
                 currentFilter === filter
                   ? 'bg-blue-600 text-white'
@@ -150,7 +153,7 @@ export const UIFeature = component$<UIFeatureProps>(({
           {items.value.map((item, idx) => (
             <div key={item.id} class="flex items-center gap-3 p-3 bg-gray-800 rounded-lg shadow hover:bg-gray-700 transition">
               <span class="w-6 text-xs font-bold text-white">#{idx + 1}</span>
-              <img src={item.avatar_url} alt={item.name} class="w-8 h-8 rounded-full" />
+              <img src={item.avatar_url} alt={item.name} class="w-8 h-8 rounded-full" width={30} height={30} />
               <div class="flex-1">
                 <h4 class="text-sm font-semibold text-white">{item.name}</h4>
                 <span class="text-xs text-gray-300">{item.trending_score}%</span>
@@ -205,7 +208,7 @@ export const UIFeature = component$<UIFeatureProps>(({
             ? items.value.map((m) => (
                 <div key={m.id} class="p-4 bg-white shadow rounded-lg hover:shadow-md transition">
                   {m.image && (
-                    <img src={m.image} alt={m.name} class="w-full h-32 object-cover rounded-md mb-2" />
+                    <img src={m.image} alt={m.name} class="w-full h-32 object-cover rounded-md mb-2" width={200} height={200} />
                   )}
                   <h3 class="text-sm font-semibold text-gray-800">{m.name}</h3>
                   <p class="text-xs text-gray-600">{m.description}</p>

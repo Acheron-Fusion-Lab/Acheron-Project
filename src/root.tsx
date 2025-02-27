@@ -22,7 +22,7 @@ export default component$(() => {
         )}
         {/* Removed: <UIOrganism type="router-head" /> */}
       </head>
-      <body lang="en" class="bg-gray-50 text-gray-900">
+      <body lang="en" class="bg-black text-gray-900">
         <RouterOutlet />
         {!isDev && <ServiceWorkerRegister />}
       </body>

@@ -1,16 +1,38 @@
-import { component$, useStore, $, Slot } from '@builder.io/qwik';
-import PageLayout from '~/components/templates/PageLayout/PageLayout';
+import { component$, useSignal, $ } from '@builder.io/qwik';
+import { UITemplate } from '~/components/UITemplates';
+
+interface FormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
 
 // Inlined ContactForm component
-const ContactForm = component$((props: { formData: any; onSubmit$: () => void }) => {
+const ContactForm = component$((props: { formData: FormData; onSubmit$: (formData: FormData) => void }) => {
+  const formData = useSignal<FormData>({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+
+  const handleSubmit$ = $((data: FormData) => {
+    if (props.onSubmit$) props.onSubmit$(data);
+  });
+
+  const handleInput$ = $((field: keyof FormData, value: string) => {
+    formData.value = { ...formData.value, [field]: value };
+  });
+
   return (
-    <form onSubmit$={(event: Event) => { event.preventDefault(); props.onSubmit$(); }} class="space-y-4">
+    <form onSubmit$={(event: Event) => { event.preventDefault(); handleSubmit$(formData.value); }} class="space-y-4">
       <div>
         <label class="block text-gray-700">Name</label>
         <input
           type="text"
-          value={props.formData.name}
-          onInput$={(e) => props.formData.name = (e.target as HTMLInputElement).value}
+          value={formData.value.name}
+          onInput$={(e) => handleInput$('name', (e.target as HTMLInputElement).value)}
           class="mt-1 block w-full border rounded p-2"
         />
       </div>
@@ -18,8 +40,8 @@ const ContactForm = component$((props: { formData: any; onSubmit$: () => void })
         <label class="block text-gray-700">Email</label>
         <input
           type="email"
-          value={props.formData.email}
-          onInput$={(e) => props.formData.email = (e.target as HTMLInputElement).value}
+          value={formData.value.email}
+          onInput$={(e) => handleInput$('email', (e.target as HTMLInputElement).value)}
           class="mt-1 block w-full border rounded p-2"
         />
       </div>
@@ -27,16 +49,16 @@ const ContactForm = component$((props: { formData: any; onSubmit$: () => void })
         <label class="block text-gray-700">Subject</label>
         <input
           type="text"
-          value={props.formData.subject}
-          onInput$={(e) => props.formData.subject = (e.target as HTMLInputElement).value}
+          value={formData.value.subject}
+          onInput$={(e) => handleInput$('subject', (e.target as HTMLInputElement).value)}
           class="mt-1 block w-full border rounded p-2"
         />
       </div>
       <div>
         <label class="block text-gray-700">Message</label>
         <textarea
-          value={props.formData.message}
-          onInput$={(e) => props.formData.message = (e.target as HTMLTextAreaElement).value}
+          value={formData.value.message}
+          onInput$={(e) => handleInput$('message', (e.target as HTMLTextAreaElement).value)}
           class="mt-1 block w-full border rounded p-2"
           rows={4}
         ></textarea>
@@ -47,7 +69,7 @@ const ContactForm = component$((props: { formData: any; onSubmit$: () => void })
 });
 
 export default component$(() => {
-  const formData = useStore({
+  const formData = useSignal<FormData>({
     name: '',
     email: '',
     subject: '',
@@ -55,13 +77,13 @@ export default component$(() => {
   });
 
   const handleSubmit = $(() => {
-    console.log('Form submitted:', formData);
+    console.log('Form submitted:', formData.value);
     // Add logic to send form data (e.g., via email or API)
   });
 
   return (
-    <PageLayout title="Contact Us">
-      <div class="contact-page">
+    <UITemplate type="page">
+      <div class="max-w-2xl mx-auto">
         {/* Introduction */}
         <section>
           <h2 class="text-2xl font-bold mb-2">Contact Us</h2>
@@ -71,7 +93,7 @@ export default component$(() => {
         {/* Contact Form */}
         <section>
           <h3 class="text-xl font-semibold mb-2">Send Us a Message</h3>
-          <ContactForm formData={formData} onSubmit$={handleSubmit} />
+          <ContactForm formData={formData.value} onSubmit$={handleSubmit} />
         </section>
 
         {/* Alternative Contact Methods */}
@@ -90,6 +112,6 @@ export default component$(() => {
           </ul>
         </section>
       </div>
-    </PageLayout>
+    </UITemplate>
   );
 });
