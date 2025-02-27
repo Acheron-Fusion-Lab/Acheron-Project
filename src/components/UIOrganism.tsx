@@ -257,7 +257,7 @@ export const UIOrganism = component$<UIOrganismProps>(({
 )}
 
 {type === 'hero' && (
-  <div class="py-16 relative ">
+  <div class="py-16 relative">
     {/* Categories Navigation */}
     <div class="overflow-x-auto no-scrollbar sticky top-0">
       <div class="flex justify-center space-x-8 px-6 py-4 max-w-7xl mx-auto">
