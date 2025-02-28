@@ -9,6 +9,7 @@ import { UITemplate } from './UITemplates';
 
 interface UIOrganismProps {
   type:
+  | 'hero'
   | 'activity'
   | 'category-grid'
   | 'feedback'
@@ -239,6 +240,66 @@ export const UIOrganism = component$<UIOrganismProps>(({
         </div>
       )}
 
+      {type === 'hero' && (
+        <div class="py-16 relative pb-32 bg-black flex flex-col">
+          {/* Categories Navigation */}
+          <div class="overflow-x-auto no-scrollbar sticky top-0 z-20">
+            <div class="flex justify-center space-x-8 px-6 py-4 max-w-7xl mx-auto">
+              {AI_CATEGORIES?.map((category) => (
+                <a
+                  key={category.id}
+                  href={category.link}
+                  class="flex flex-col items-center group min-w-[64px] hover:opacity-100 opacity-90 transition-opacity"
+                >
+                  <div class="w-12 h-12 mb-2 rounded-2xl flex items-center justify-center">
+                    <img
+                      src={category.icon}
+                      alt={category.name}
+                      class="w-8 h-8 object-contain"
+                    />
+                  </div>
+                  <span class="text-xs font-medium text-white">{category.name}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Centered Headline */}
+          <div class="text-center mb-6 mt-16"> {/* Increased margin-top */}
+            <h1 class="text-3xl font-bold text-white">Discover the latest AI models.</h1>
+          </div>
+
+          {/* Grid of Featured Models */}
+          <div class="relative z-10 grid grid-cols-4 md:grid-cols-4 lg:grid-cols-4 gap-8 max-w-7xl mx-auto px-4 pb-16">
+            {FEATURED_MODELS?.map((item, index) => (
+              <div key={index} class="relative bg-gray-50 rounded-2xl p-6 hover:shadow-md transition-shadow">
+                {item.tag && (
+                  <span class="inline-block px-3 py-1 text-xs font-medium bg-red-900 text-white rounded-full mb-4">
+                    {item.tag}
+                  </span>
+                )}
+                <h2 class="text-2xl font-semibold text-gray-900 mb-2">{item.headline}</h2>
+                <p class="text-sm text-gray-600 mb-2">{item.subheadline}</p>
+                {item.price && (
+                  <p class="text-sm text-gray-500 mb-4">{item.price}</p>
+                )}
+                <img
+                  src={item.image}
+                  alt={item.headline}
+                  class="w-full h-48 object-contain transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <a
+                  href={item.ctaLink}
+                  class="inline-block mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                >
+                  {item.ctaText}
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {type === 'category-navigation' && (
         <div class="py-16 relative pb-40 min-h-fit flex flex-col bg-black">
           {/* Categories Navigation */}
@@ -272,7 +333,7 @@ export const UIOrganism = component$<UIOrganismProps>(({
             <div class="text-center mb-6 mt-16">
               <h1 class="text-3xl font-bold text-white">
                 Discover the latest AI models.
-              </h1> 
+              </h1>
             </div>
 
             {/* Grid of Featured Models */}

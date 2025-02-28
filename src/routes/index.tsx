@@ -61,6 +61,7 @@ export default component$(() => {
           return (
             <div class="space-y-16">
               {/* Hero Section */}
+              <UIOrganism type="hero" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS } as any} />
               <UIOrganism type="category-navigation" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS } as any} />
               <UIOrganism type="model-cards-hero" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS } as any} />
               <UIOrganism type="activity" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS } as any} />
