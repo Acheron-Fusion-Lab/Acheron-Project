@@ -102,7 +102,7 @@ export const FEATURED_MODELS = [
     headline: 'DALL-E 3',
     subheadline: 'Advanced image generation model.',
     image: '/images/dalle3.png',
-    ctaText: 'Explore',
+    ctaText: 'Learn More',
     ctaLink: '/models/dalle3'
   },
   // Add more AI models

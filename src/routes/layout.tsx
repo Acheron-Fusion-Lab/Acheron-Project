@@ -6,8 +6,8 @@ import { UIOrganism } from '~/components/UIOrganism';
 export default component$(() => {
   return (
     <>
-      {/* Header - Inspired by Epic Games: Bold, dynamic */}
-      <UIOrganism type="header" />
+      {/* Header - Inspired by Epic Games: Bold, dynamic */}v
+            <UIOrganism type="header" />
 
       {/* Main Content Area - Inspired by Apple Store: Clean, centered */}
       <main class="flex-1 container mx-auto px-4 py-6">
