@@ -60,7 +60,8 @@ export default component$(() => {
           return (
             <div class="space-y-16">
               {/* Hero Section */}
-              <UIOrganism type="hero" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
+              <UIOrganism type="category-navigation" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
+              <UIOrganism type="model-cards-hero" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
 
               {/* Trending Models */}
               <section class="container my-auto mx-auto p-4 mb-16">

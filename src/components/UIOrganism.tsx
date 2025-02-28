@@ -11,7 +11,8 @@ interface UIOrganismProps {
   | 'featured-models'
   | 'footer'
   | 'header'
-  | 'hero'
+  | 'model-cards-hero'
+  | 'category-navigation'
   | 'leaderboard'
   | 'login'
   | 'model-card'
@@ -234,65 +235,78 @@ export const UIOrganism = component$<UIOrganismProps>(({
         </div>
       )}
 
-      {type === 'hero' && (
-        <div class="py-16 relative pb-40 min-h-fit flex flex-col">
+      {type === 'category-navigation' && (
+        <div class="py-16 relative pb-40 min-h-fit flex flex-col bg-black">
           {/* Categories Navigation */}
-          <div class="overflow-x-auto no-scrollbar sticky top-0 z-20 bg-black">
+          <div class="overflow-x-auto no-scrollbar sticky top-0 z-20 bg-black" style={{ scrollBehavior: 'smooth' }}>
             <div class="flex justify-center space-x-8 px-6 py-4 max-w-7xl mx-auto">
               {AI_CATEGORIES?.map((category) => (
                 <a
                   key={category.id}
                   href={category.link}
-                  class="flex flex-col items-center group min-w-[64px] hover:opacity-100 opacity-90 transition-opacity"
+                  className="flex flex-col items-center group min-w-[64px] hover:opacity-100 opacity-90 transition-opacity"
                 >
-                  <div class="w-12 h-12 mb-2 rounded-2xl bg-white flex items-center justify-center">
+                  <div className="w-12 h-12 mb-2 rounded-2xl bg-white flex items-center justify-center">
                     <img
                       src={category.icon}
                       alt={category.name}
-                      class="w-8 h-8 object-contain"
+                      className="w-8 h-8 object-contain"
                     />
                   </div>
-                  <span class="text-xs font-medium text-white">{category.name}</span>
+                  <span className="text-xs font-medium text-white">{category.name}</span>
                 </a>
               ))}
             </div>
           </div>
-
-          {/* Centered Headline */}
-          <div class="text-center mb-6 mt-16"> {/* Increased margin-top */}
-            <h1 class="text-3xl font-bold text-white">Discover the latest AI models.</h1>
-          </div>
-
-          {/* Grid of Featured Models */}
-          <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto px-4 pb-16 mb-16">
-            {FEATURED_MODELS?.map((item, index) => (
-              <div key={index} class="relative bg-gray-50 rounded-2xl p-6 hover:shadow-md transition-shadow">
-                {item.tag && (
-                  <span class="inline-block px-3 py-1 text-xs font-medium bg-red-900 text-white rounded-full mb-4">
-                    {item.tag}
-                  </span>
-                )}
-                <h2 class="text-2xl font-semibold text-gray-900 mb-2">{item.headline}</h2>
-                <p class="text-sm text-gray-600 mb-2">{item.subheadline}</p>
-                {item.price && (
-                  <p class="text-sm text-gray-500 mb-4">{item.price}</p>
-                )}
-                <img
-                  src={item.image}
-                  alt={item.headline}
-                  class="w-full h-48 object-contain transform group-hover:scale-105 transition-transform duration-300"
-                />
-                <a
-                  href={item.ctaLink}
-                  class="inline-block mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-                >
-                  {item.ctaText}
-                </a>
-              </div>
-            ))}
-          </div>
         </div>
       )}
+
+      {type === 'model-cards-hero' && (
+        <>
+          {/* Centered Headline */}
+          <div class="py-16 relative pb-40 min-h-fit flex flex-col">
+            <div class="text-center mb-6 mt-16">
+              <h1 class="text-3xl font-bold text-white">
+                Discover the latest AI models.
+              </h1>
+            </div>
+
+            {/* Grid of Featured Models */}
+            <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto px-4 pb-16 mb-16">
+              {FEATURED_MODELS?.map((item, index) => (
+                <div key={index} class="relative bg-gray-50 rounded-2xl p-6 hover:shadow-md transition-shadow">
+                  {item.tag && (
+                    <span class="inline-block px-3 py-1 text-xs font-medium bg-red-900 text-white rounded-full mb-4">
+                      {item.tag}
+                    </span>
+                  )}
+                  <h2 class="text-2xl font-semibold text-gray-900 mb-2">
+                    {item.headline}
+                  </h2>
+                  <p class="text-sm text-gray-600 mb-2">{item.subheadline}</p>
+                  {item.price && (
+                    <p class="text-sm text-gray-500 mb-4">{item.price}</p>
+                  )}
+                  <img
+                    src={item.image}
+                    alt={item.headline}
+                    class="w-full h-48 object-contain transform group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <a
+                    href={item.ctaLink}
+                    class="inline-block mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                  >
+                    {item.ctaText}
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+
+
+
 
 
       {type === 'leaderboard' && (
@@ -316,198 +330,222 @@ export const UIOrganism = component$<UIOrganismProps>(({
         </div>
       )}
 
-      {type === 'login' && (
-        <form class="space-y-1" onSubmit$={handleLogin}>
-          <div>
-            <label class="text-xs font-bold">Email</label>
-            <input type="email" class="w-full p-1 border rounded text-xs" value={email.value} onInput$={(e) => email.value = (e.target as HTMLInputElement).value} />
-          </div>
-          <div>
-            <label class="text-xs font-bold">Password</label>
-            <input type="password" class="w-full p-1 border rounded text-xs" value={password.value} onInput$={(e) => password.value = (e.target as HTMLInputElement).value} />
-          </div>
-          <button type="submit" class="p-1 bg-blue-500 rounded text-xs hover:bg-blue-700" disabled={isLoading}>
-            {isLoading ? 'Loading...' : 'Login'}
-          </button>
-        </form>
-      )}
-
-      {type === 'model-card' && !Array.isArray(data) && data?.model && (
-        <div class={`p-1 border rounded hover:bg-gray-100 ${data.model.isSelected ? 'border-blue-500 bg-blue-50' : ''} text-xs`} onClick$={onSelect$}>
-          <div class="flex justify-between">
+      {
+        type === 'login' && (
+          <form class="space-y-1" onSubmit$={handleLogin}>
             <div>
-              <h2 class="font-semibold">{data.model.name}</h2>
-              {showTrending && <span class="flex items-center text-red-600"><svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M5 10l7-7 7 7-7 7-7-7z" /></svg>Trending</span>}
+              <label class="text-xs font-bold">Email</label>
+              <input type="email" class="w-full p-1 border rounded text-xs" value={email.value} onInput$={(e) => email.value = (e.target as HTMLInputElement).value} />
             </div>
-            <span class="px-1 rounded bg-blue-100 text-blue-700">{data.model.category}</span>
+            <div>
+              <label class="text-xs font-bold">Password</label>
+              <input type="password" class="w-full p-1 border rounded text-xs" value={password.value} onInput$={(e) => password.value = (e.target as HTMLInputElement).value} />
+            </div>
+            <button type="submit" class="p-1 bg-blue-500 rounded text-xs hover:bg-blue-700" disabled={isLoading}>
+              {isLoading ? 'Loading...' : 'Login'}
+            </button>
+          </form>
+        )
+      }
+
+      {
+        type === 'model-card' && !Array.isArray(data) && data?.model && (
+          <div class={`p-1 border rounded hover:bg-gray-100 ${data.model.isSelected ? 'border-blue-500 bg-blue-50' : ''} text-xs`} onClick$={onSelect$}>
+            <div class="flex justify-between">
+              <div>
+                <h2 class="font-semibold">{data.model.name}</h2>
+                {showTrending && <span class="flex items-center text-red-600"><svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M5 10l7-7 7 7-7 7-7-7z" /></svg>Trending</span>}
+              </div>
+              <span class="px-1 rounded bg-blue-100 text-blue-700">{data.model.category}</span>
+            </div>
+            <p>By {data.model.creator}</p>
+            <p>Price: ${data.model.price}</p>
+            <p>Accuracy: {data.model.accuracy}%</p>
           </div>
-          <p>By {data.model.creator}</p>
-          <p>Price: ${data.model.price}</p>
-          <p>Accuracy: {data.model.accuracy}%</p>
-        </div>
-      )}
+        )
+      }
 
-      {type === 'model-compact' && !Array.isArray(data) && data?.model && (
-        <div class="p-1 border rounded text-xs"><p>{data.model.id}</p></div>
-      )}
+      {
+        type === 'model-compact' && !Array.isArray(data) && data?.model && (
+          <div class="p-1 border rounded text-xs"><p>{data.model.id}</p></div>
+        )
+      }
 
-      {type === 'overview' && !Array.isArray(data) && (
-        <div class="space-y-1">
-          <h2 class="text-sm font-bold">Overview</h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-1 text-xs">
-            <div class="p-1 rounded bg-gray-100 text-center"><p>Saved Models</p><p class="font-bold">{data?.savedModelsCount}</p></div>
-            <div class="p-1 rounded bg-gray-100 text-center"><p>Active Labs</p><p class="font-bold">{data?.activeLabsFollowed}</p></div>
-            <div class="p-1 rounded bg-gray-100 text-center"><p>Interactions</p><p class="font-bold">{data?.recentInteractions}</p></div>
+      {
+        type === 'overview' && !Array.isArray(data) && (
+          <div class="space-y-1">
+            <h2 class="text-sm font-bold">Overview</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-1 text-xs">
+              <div class="p-1 rounded bg-gray-100 text-center"><p>Saved Models</p><p class="font-bold">{data?.savedModelsCount}</p></div>
+              <div class="p-1 rounded bg-gray-100 text-center"><p>Active Labs</p><p class="font-bold">{data?.activeLabsFollowed}</p></div>
+              <div class="p-1 rounded bg-gray-100 text-center"><p>Interactions</p><p class="font-bold">{data?.recentInteractions}</p></div>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
-      {type === 'performance' && !Array.isArray(data) && data?.model?.performanceMetrics && (
-        <div class="p-2 rounded">
-          <h2 class="text-sm font-semibold">Metrics</h2>
-          <ul class="space-y-1 text-xs">
-            <li class="flex justify-between"><span>Accuracy:</span><span>{data.model.performanceMetrics.accuracy}%</span></li>
-            <li class="flex justify-between"><span>Precision:</span><span>{data.model.performanceMetrics.precision}%</span></li>
-            <li class="flex justify-between"><span>Recall:</span><span>{data.model.performanceMetrics.recall}%</span></li>
-            <li class="flex justify-between"><span>F1 Score:</span><span>{data.model.performanceMetrics.f1Score}%</span></li>
-          </ul>
-        </div>
-      )}
+      {
+        type === 'performance' && !Array.isArray(data) && data?.model?.performanceMetrics && (
+          <div class="p-2 rounded">
+            <h2 class="text-sm font-semibold">Metrics</h2>
+            <ul class="space-y-1 text-xs">
+              <li class="flex justify-between"><span>Accuracy:</span><span>{data.model.performanceMetrics.accuracy}%</span></li>
+              <li class="flex justify-between"><span>Precision:</span><span>{data.model.performanceMetrics.precision}%</span></li>
+              <li class="flex justify-between"><span>Recall:</span><span>{data.model.performanceMetrics.recall}%</span></li>
+              <li class="flex justify-between"><span>F1 Score:</span><span>{data.model.performanceMetrics.f1Score}%</span></li>
+            </ul>
+          </div>
+        )
+      }
 
       {(type === 'insights' && <div class="p-2 border rounded text-xs">Chart Placeholder</div>)}
 
       {/* Router head section needs to be reimplemented without useDocumentHead */}
-      {type === 'router-head' && (
-        <div>Router Head Placeholder</div>
-      )}
+      {
+        type === 'router-head' && (
+          <div>Router Head Placeholder</div>
+        )
+      }
 
-      {type === 'saved-models' && (
-        <div class="space-y-1 text-xs">
-          {Array.isArray(data) && data.length ? data.map((m: any) => (
-            <div key={m.id} class="p-1 border rounded">{m.id}</div>
-          )) : <p>No saved models</p>}
-        </div>
-      )}
-
-      {type === 'search-grid' && (
-        <div class="space-y-1 text-xs">
-          <div class="flex justify-between">
-            {/* Fix for error 2: Add proper type checking for query property */}
-            <h2>
-              {Array.isArray(paginated) ? paginated.length : 0} results for "
-              {!Array.isArray(data) && data && 'query' in data ? data.query : ''}"
-            </h2>
-            <select class="p-1 border rounded" onChange$={(e) => handleSort((e.target as HTMLSelectElement).value)}>
-              <option value="relevance">Relevance</option>
-              <option value="price">Price</option>
-              <option value="accuracy">Accuracy</option>
-            </select>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-1">
-            {Array.isArray(paginated) && paginated.map((m: any) => (
-              <div key={m.id} class="p-1 border rounded">{m.id}</div>
-            ))}
-          </div>
-          <div class="flex justify-center gap-1">
-            <button class="p-1 border rounded" onClick$={() => currentPage.value > 1 && currentPage.value--} disabled={currentPage.value === 1}>Prev</button>
-            {Array.from({ length: Math.ceil(Array.isArray(data) ? data.length / 10 : 0) }, (_, i) => i + 1).map((p) => (
-              <button key={p} class={`p-1 border rounded ${p === currentPage.value ? 'bg-blue-500 text-white' : ''}`} onClick$={() => currentPage.value = p}>{p}</button>
-            ))}
-            <button class="p-1 border rounded" onClick$={() => currentPage.value < Math.ceil(Array.isArray(data) ? data.length / 10 : 0) && currentPage.value++} disabled={currentPage.value === Math.ceil(Array.isArray(data) ? data.length / 10 : 0)}>Next</button>
-          </div>
-        </div>
-      )}
-
-      {type === 'sortable-categories' && (
-        <div class="overflow-x-auto text-xs">
-          <table class="w-full border-collapse">
-            <thead class="bg-gray-700 text-white">
-              <tr>
-                {['Rank', 'Category', 'Models', 'Dominance', 'Compute', 'Trend'].map((col) => (
-                  <th key={col} class="p-1" onClick$={() => onSort$?.(col.toLowerCase())}>{col}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {Array.isArray(data) && data.map((cat: any, idx: number) => (
-                <tr key={cat.id} class="hover:bg-gray-800">
-                  <td class="p-1">#{idx + 1}</td>
-                  <td class="p-1 flex gap-1"><img src={cat.icon_url} alt={cat.name} class="w-4 h-4 rounded" />{cat.name}</td>
-                  <td class="p-1">{cat.model_count}</td>
-                  <td class="p-1">
-                    <div class="w-full h-1 bg-gray-200 rounded">
-                      <div class="h-1 bg-blue-500 rounded" style={{ width: `${cat.dominance}%` }} />
-                    </div>
-                  </td>
-                  <td class="p-1">${cat.total_compute_cost.toLocaleString()}</td>
-                  <td class="p-1 flex justify-end">
-                    <span class={cat.weekly_trend > 0 ? 'text-green-500' : 'text-red-500'}>
-                      {cat.weekly_trend > 0 ? '↑' : '↓'}{Math.abs(cat.weekly_trend)}%
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {type === 'sortable-labs' && (
-        <div class="overflow-x-auto text-xs">
-          <table class="w-full border-collapse">
-            <thead class="bg-gray-700 text-white">
-              <tr>
-                {['Rank', 'Lab', 'Reputation', 'Models', 'Papers', 'Funding'].map((col) => (
-                  <th key={col} class="p-1" onClick$={() => onSort$?.(col.toLowerCase())}>{col}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {Array.isArray(data) && data.map((lab: any, idx: number) => (
-                <tr key={lab.id} class="hover:bg-gray-800">
-                  <td class="p-1">#{idx + 1}</td>
-                  <td class="p-1 flex gap-1"><img src={lab.avatar_url} alt={lab.name} class="w-4 h-4 rounded" />{lab.name}</td>
-                  <td class="p-1">{lab.reputation.toFixed(1)}</td>
-                  <td class="p-1">{lab.models_count}</td>
-                  <td class="p-1">{lab.papers_count}</td>
-                  <td class="p-1">${lab.funding.toLocaleString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {type === 'stats' && (
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-1 text-xs">
-          {Array.isArray(data) && data.map((stat: any) => (
-            <div key={stat.label} class="p-1 rounded bg-black text-center">
-              <p class="text-white">{stat.label}</p>
-              <p class="text-white font-bold">{stat.value}</p>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {type === 'trending-models' && (
-        <div class="p-2 rounded bg-gray-900">
-          <div class="flex justify-between mb-1">
-            <h3 class="text-sm font-semibold">Trending Models</h3>
-            <span class="text-xs text-gray-400">{'>'}</span>
-          </div>
+      {
+        type === 'saved-models' && (
           <div class="space-y-1 text-xs">
-            {Array.isArray(data) && data.map((m: any) => (
-              <div key={m.id} class="flex justify-between p-1 hover:bg-gray-800 rounded">
-                <div class="flex gap-1">
-                  <div class="w-4 h-4 rounded-full bg-gray-700 flex items-center justify-center">{m.rank}</div>
-                  <p class="text-white">{m.modelName}</p>
-                </div>
-                <p class={m.performanceChange.startsWith('+') ? 'text-green-400' : 'text-red-400'}>{m.performanceChange}</p>
+            {Array.isArray(data) && data.length ? data.map((m: any) => (
+              <div key={m.id} class="p-1 border rounded">{m.id}</div>
+            )) : <p>No saved models</p>}
+          </div>
+        )
+      }
+
+      {
+        type === 'search-grid' && (
+          <div class="space-y-1 text-xs">
+            <div class="flex justify-between">
+              {/* Fix for error 2: Add proper type checking for query property */}
+              <h2>
+                {Array.isArray(paginated) ? paginated.length : 0} results for "
+                {!Array.isArray(data) && data && 'query' in data ? data.query : ''}"
+              </h2>
+              <select class="p-1 border rounded" onChange$={(e) => handleSort((e.target as HTMLSelectElement).value)}>
+                <option value="relevance">Relevance</option>
+                <option value="price">Price</option>
+                <option value="accuracy">Accuracy</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-1">
+              {Array.isArray(paginated) && paginated.map((m: any) => (
+                <div key={m.id} class="p-1 border rounded">{m.id}</div>
+              ))}
+            </div>
+            <div class="flex justify-center gap-1">
+              <button class="p-1 border rounded" onClick$={() => currentPage.value > 1 && currentPage.value--} disabled={currentPage.value === 1}>Prev</button>
+              {Array.from({ length: Math.ceil(Array.isArray(data) ? data.length / 10 : 0) }, (_, i) => i + 1).map((p) => (
+                <button key={p} class={`p-1 border rounded ${p === currentPage.value ? 'bg-blue-500 text-white' : ''}`} onClick$={() => currentPage.value = p}>{p}</button>
+              ))}
+              <button class="p-1 border rounded" onClick$={() => currentPage.value < Math.ceil(Array.isArray(data) ? data.length / 10 : 0) && currentPage.value++} disabled={currentPage.value === Math.ceil(Array.isArray(data) ? data.length / 10 : 0)}>Next</button>
+            </div>
+          </div>
+        )
+      }
+
+      {
+        type === 'sortable-categories' && (
+          <div class="overflow-x-auto text-xs">
+            <table class="w-full border-collapse">
+              <thead class="bg-gray-700 text-white">
+                <tr>
+                  {['Rank', 'Category', 'Models', 'Dominance', 'Compute', 'Trend'].map((col) => (
+                    <th key={col} class="p-1" onClick$={() => onSort$?.(col.toLowerCase())}>{col}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {Array.isArray(data) && data.map((cat: any, idx: number) => (
+                  <tr key={cat.id} class="hover:bg-gray-800">
+                    <td class="p-1">#{idx + 1}</td>
+                    <td class="p-1 flex gap-1"><img src={cat.icon_url} alt={cat.name} class="w-4 h-4 rounded" />{cat.name}</td>
+                    <td class="p-1">{cat.model_count}</td>
+                    <td class="p-1">
+                      <div class="w-full h-1 bg-gray-200 rounded">
+                        <div class="h-1 bg-blue-500 rounded" style={{ width: `${cat.dominance}%` }} />
+                      </div>
+                    </td>
+                    <td class="p-1">${cat.total_compute_cost.toLocaleString()}</td>
+                    <td class="p-1 flex justify-end">
+                      <span class={cat.weekly_trend > 0 ? 'text-green-500' : 'text-red-500'}>
+                        {cat.weekly_trend > 0 ? '↑' : '↓'}{Math.abs(cat.weekly_trend)}%
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
+      }
+
+      {
+        type === 'sortable-labs' && (
+          <div class="overflow-x-auto text-xs">
+            <table class="w-full border-collapse">
+              <thead class="bg-gray-700 text-white">
+                <tr>
+                  {['Rank', 'Lab', 'Reputation', 'Models', 'Papers', 'Funding'].map((col) => (
+                    <th key={col} class="p-1" onClick$={() => onSort$?.(col.toLowerCase())}>{col}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {Array.isArray(data) && data.map((lab: any, idx: number) => (
+                  <tr key={lab.id} class="hover:bg-gray-800">
+                    <td class="p-1">#{idx + 1}</td>
+                    <td class="p-1 flex gap-1"><img src={lab.avatar_url} alt={lab.name} class="w-4 h-4 rounded" />{lab.name}</td>
+                    <td class="p-1">{lab.reputation.toFixed(1)}</td>
+                    <td class="p-1">{lab.models_count}</td>
+                    <td class="p-1">{lab.papers_count}</td>
+                    <td class="p-1">${lab.funding.toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
+      }
+
+      {
+        type === 'stats' && (
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-1 text-xs">
+            {Array.isArray(data) && data.map((stat: any) => (
+              <div key={stat.label} class="p-1 rounded bg-black text-center">
+                <p class="text-white">{stat.label}</p>
+                <p class="text-white font-bold">{stat.value}</p>
               </div>
             ))}
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+
+      {
+        type === 'trending-models' && (
+          <div class="p-2 rounded bg-gray-900">
+            <div class="flex justify-between mb-1">
+              <h3 class="text-sm font-semibold">Trending Models</h3>
+              <span class="text-xs text-gray-400">{'>'}</span>
+            </div>
+            <div class="space-y-1 text-xs">
+              {Array.isArray(data) && data.map((m: any) => (
+                <div key={m.id} class="flex justify-between p-1 hover:bg-gray-800 rounded">
+                  <div class="flex gap-1">
+                    <div class="w-4 h-4 rounded-full bg-gray-700 flex items-center justify-center">{m.rank}</div>
+                    <p class="text-white">{m.modelName}</p>
+                  </div>
+                  <p class={m.performanceChange.startsWith('+') ? 'text-green-400' : 'text-red-400'}>{m.performanceChange}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </div >
   );
 });
