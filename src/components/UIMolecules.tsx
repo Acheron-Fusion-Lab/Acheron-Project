@@ -1,6 +1,10 @@
 import { component$, useSignal, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { createClient } from '@supabase/supabase-js';
 import { Chart, registerables } from 'chart.js';
+import { UITemplate } from './UITemplates';
+import { UIAtom } from './UIAtom';
+import { UIOrganism } from './UIOrganism';
+import { UIFeature } from './UIFeatures';
 Chart.register(...registerables);
 
 interface UIMoleculeProps {

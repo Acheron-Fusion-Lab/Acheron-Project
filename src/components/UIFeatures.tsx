@@ -1,5 +1,9 @@
 import { component$, useSignal, useStore, useTask$, $ } from '@builder.io/qwik';
 import { createClient } from '@supabase/supabase-js';
+import { UIMolecule } from './UIMolecules';
+import { UIAtom } from './UIAtom';
+import { UITemplate } from './UITemplates';
+import { UIOrganism } from './UIOrganism';
 
 interface UIFeatureProps {
   type:

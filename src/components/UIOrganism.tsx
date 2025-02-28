@@ -1,6 +1,10 @@
 // src/components/organisms/UIOrganism.tsx 
 import { component$, useSignal, $, HTMLAttributes, QwikJSX } from '@builder.io/qwik';
 import { FEATURED_MODELS, AI_CATEGORIES } from '~/mocks/data';
+import { UIAtom } from './UIAtom';
+import { UIFeature } from './UIFeatures';
+import { UIMolecule } from './UIMolecules';
+import { UITemplate } from './UITemplates';
 // Fix 1: Remove useDocumentHead import
 
 interface UIOrganismProps {
@@ -103,7 +107,7 @@ export const UIOrganism = component$<UIOrganismProps>(({
     : data;
 
   return (
-    <div class={`p-2 ${type === 'header' || type === 'footer' || type === 'hero' ? 'bg-black text-white' : 'bg-gray-50'} ${type === 'hero' ? 'h-64' : ''} rounded`}>
+    <div class={`p-2 ${type === 'header' || type === 'footer' ? 'bg-black text-white' : 'bg-gray-50'} rounded`}>
       {type === 'activity' && (
         <div class="space-y-1">
           {Array.isArray(data) && data.length ? data.map((item: any) => (
@@ -244,16 +248,16 @@ export const UIOrganism = component$<UIOrganismProps>(({
                 <a
                   key={category.id}
                   href={category.link}
-                  className="flex flex-col items-center group min-w-[64px] hover:opacity-100 opacity-90 transition-opacity"
+                  class="flex flex-col items-center group min-w-[64px] hover:opacity-100 opacity-90 transition-opacity"
                 >
-                  <div className="w-12 h-12 mb-2 rounded-2xl bg-white flex items-center justify-center">
+                  <div class="w-12 h-12 mb-2 rounded-2xl bg-white flex items-center justify-center">
                     <img
                       src={category.icon}
                       alt={category.name}
-                      className="w-8 h-8 object-contain"
+                      class="w-8 h-8 object-contain"
                     />
                   </div>
-                  <span className="text-xs font-medium text-white">{category.name}</span>
+                  <span class="text-xs font-medium text-white">{category.name}</span>
                 </a>
               ))}
             </div>
@@ -262,19 +266,19 @@ export const UIOrganism = component$<UIOrganismProps>(({
       )}
 
       {type === 'model-cards-hero' && (
-        <>
+        <div class="bg-black">
           {/* Centered Headline */}
           <div class="py-16 relative pb-40 min-h-fit flex flex-col">
             <div class="text-center mb-6 mt-16">
               <h1 class="text-3xl font-bold text-white">
                 Discover the latest AI models.
-              </h1>
+              </h1> 
             </div>
 
             {/* Grid of Featured Models */}
             <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto px-4 pb-16 mb-16">
               {FEATURED_MODELS?.map((item, index) => (
-                <div key={index} class="relative bg-gray-50 rounded-2xl p-6 hover:shadow-md transition-shadow">
+                <div key={index} class="relative bg-gray-50 rounded-2xl p-6 hover:shadow-md hover:shadow-red-700 hover:shadow-xl transition-shadow">
                   {item.tag && (
                     <span class="inline-block px-3 py-1 text-xs font-medium bg-red-900 text-white rounded-full mb-4">
                       {item.tag}
@@ -302,7 +306,7 @@ export const UIOrganism = component$<UIOrganismProps>(({
               ))}
             </div>
           </div>
-        </>
+        </div>
       )}
 
 

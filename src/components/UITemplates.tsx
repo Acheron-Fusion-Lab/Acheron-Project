@@ -1,7 +1,16 @@
 import { component$, Slot, useSignal, useStore } from '@builder.io/qwik';
 import { UIOrganism } from './UIOrganism';
+import { UIAtom } from './UIAtom';
+import { UIFeature } from './UIFeatures';
+import { UIMolecule } from './UIMolecules';
+
 interface UITemplateProps {
-  type: 'auth' | 'detail' | 'listing' | 'page' | 'playground';
+  type: 
+  | 'auth' 
+  | 'detail' 
+  | 'listing' 
+  | 'page' 
+  | 'playground';
   title?: string;
   items?: any[];
   renderItem?: (item: any) => any;

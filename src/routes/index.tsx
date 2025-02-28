@@ -4,6 +4,7 @@ import { UITemplate } from '~/components/UITemplates';
 import { UIOrganism } from '~/components/UIOrganism';
 import { UIAtom } from '~/components/UIAtom';
 import { FEATURED_MODELS, AI_CATEGORIES } from '~/mocks/data';
+import { UIFeature } from '~/components/UIFeatures';
 
 const FEATUREDMODEL = [
   { id: '1', rank: 1, modelName: 'Llama 2 70B', performanceChange: '+15.2%' },
@@ -60,8 +61,17 @@ export default component$(() => {
           return (
             <div class="space-y-16">
               {/* Hero Section */}
-              <UIOrganism type="category-navigation" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
-              <UIOrganism type="model-cards-hero" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
+              <UIOrganism type="category-navigation" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS } as any} />
+              <UIOrganism type="model-cards-hero" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS } as any} />
+              <UIOrganism type="activity" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS } as any} />
+              <UIOrganism type="category-grid" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
+              <UIOrganism type="overview" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
+              <UIOrganism type="performance" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
+              <UIOrganism type="insights" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
+              <UIOrganism type="saved-models" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
+              <UIOrganism type="sortable-categories" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
+              <UIOrganism type="sortable-labs" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
+              <UIOrganism type="stats" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
 
               {/* Trending Models */}
               <section class="container my-auto mx-auto p-4 mb-16">
