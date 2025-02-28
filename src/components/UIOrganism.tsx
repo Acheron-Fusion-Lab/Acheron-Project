@@ -216,7 +216,6 @@ export const UIOrganism = component$<UIOrganismProps>(({
         <div class="flex items-center justify-between px-4 py-2 bg-black text-white">
           <div class="flex items-center space-x-4">
             <div class="flex items-center space-x-2">
-              <img src="/arkham-logo.png" alt="Arkham Logo" class="h-6" />
               <span class="font-bold">ModelMirror</span>
             </div>
             <nav class="flex space-x-4 text-gray-400">
@@ -227,15 +226,18 @@ export const UIOrganism = component$<UIOrganismProps>(({
               <a href="#" class="hover:text-white">Compare</a>
               <a href="#" class="hover:text-white">More</a>
             </nav>
-          </div>
-          <div class="flex items-center space-x-4">
-            <input
-              type="text"
-              placeholder="Search for AI Models, categories, AI labs..."
-              class="bg-gray-800 text-gray-300 px-3 py-1 rounded w-64 placeholder-gray-500"
-            />
-            <a href="#" class="text-gray-400 hover:text-white">Profile</a>
-            <a href="#" class="text-gray-400 hover:text-white">Saved</a>
+            <div class="flex items-center space-x-4">
+              <input
+                type="text"
+                placeholder="Search for AI Models, categories, AI labs..."
+                class="bg-gray-800 text-gray-300 px-3 py-1 rounded w-64 placeholder-gray-500"
+              />
+              <a href="#" class="text-gray-400 hover:text-white">Profile</a>
+              <a href="#" class="text-gray-400 hover:text-white">Saved</a>
+              <a href="#" class="text-gray-400 hover:text-white">Playground</a>
+              <a href="#" class="text-gray-400 hover:text-white">X</a>
+              <a href="#" class="text-gray-400 hover:text-white">Github</a>
+            </div>
           </div>
         </div>
       )}
@@ -265,41 +267,60 @@ export const UIOrganism = component$<UIOrganismProps>(({
           </div>
 
           {/* Centered Headline */}
-          <div class="text-center mb-6 mt-16"> {/* Increased margin-top */}
+          <div class="text-center mb-6 mt-16">
             <h1 class="text-3xl font-bold text-white">Discover the latest AI models.</h1>
           </div>
 
-          {/* Grid of Featured Models */}
-          <div class="relative z-10 grid grid-cols-4 md:grid-cols-4 lg:grid-cols-4 gap-8 max-w-7xl mx-auto px-4 pb-16">
-            {FEATURED_MODELS?.map((item, index) => (
-              <div key={index} class="relative bg-gray-50 rounded-2xl p-6 hover:shadow-md transition-shadow">
-                {item.tag && (
-                  <span class="inline-block px-3 py-1 text-xs font-medium bg-red-900 text-white rounded-full mb-4">
-                    {item.tag}
-                  </span>
-                )}
-                <h2 class="text-2xl font-semibold text-gray-900 mb-2">{item.headline}</h2>
-                <p class="text-sm text-gray-600 mb-2">{item.subheadline}</p>
-                {item.price && (
-                  <p class="text-sm text-gray-500 mb-4">{item.price}</p>
-                )}
-                <img
-                  src={item.image}
-                  alt={item.headline}
-                  class="w-full h-48 object-contain transform group-hover:scale-105 transition-transform duration-300"
-                />
-                <a
-                  href={item.ctaLink}
-                  class="inline-block mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+          {/* Horizontal Scrolling Model Cards with Navigation */}
+          <div class="relative z-10 max-w-7xl mx-auto px-4 pb-16">
+            <div
+              class="flex overflow-x-auto no-scrollbar space-x-4"
+              style={{ scrollBehavior: 'smooth' }}
+            >
+              {FEATURED_MODELS?.map((item, index) => (
+                <div
+                  key={index}
+                  class="flex-none w-80 bg-gray-50 rounded-2xl p-6 hover:shadow-md transition-shadow opacity-70 hover:opacity-100"
                 >
-                  {item.ctaText}
-                </a>
-              </div>
-            ))}
+                  {item.tag && (
+                    <span class="inline-block px-3 py-1 text-xs font-medium bg-red-900 text-white rounded-full mb-4">
+                      {item.tag}
+                    </span>
+                  )}
+                  <h2 class="text-2xl font-semibold text-gray-900 mb-2">{item.headline}</h2>
+                  <p class="text-sm text-gray-600 mb-2">{item.subheadline}</p>
+                  {item.price && (
+                    <p class="text-sm text-gray-500 mb-4">{item.price}</p>
+                  )}
+                  <img
+                    src={item.image}
+                    alt={item.headline}
+                    class="w-full h-48 object-contain transform group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <a
+                    href={item.ctaLink}
+                    class="inline-block mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                  >
+                    {item.ctaText}
+                  </a>
+                </div>
+              ))}
+            </div>
+
+            {/* Navigation Buttons */}
+            <button
+              class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-md hover:bg-gray-200 transition-colors text-gray-800"
+            >
+              ◀ {/* Left Arrow */}
+            </button>
+            <button
+              class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-md hover:bg-gray-200 transition-colors text-gray-800"
+            >
+              ▶ {/* Right Arrow */}
+            </button>
           </div>
         </div>
       )}
-
       {type === 'category-navigation' && (
         <div class="py-16 relative pb-40 min-h-fit flex flex-col bg-black">
           {/* Categories Navigation */}

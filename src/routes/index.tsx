@@ -62,18 +62,7 @@ export default component$(() => {
             <div class="space-y-16">
               {/* Hero Section */}
               <UIOrganism type="hero" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS } as any} />
-              <UIOrganism type="category-navigation" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS } as any} />
-              <UIOrganism type="model-cards-hero" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS } as any} />
-              <UIOrganism type="activity" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS } as any} />
-              <UIOrganism type="category-grid" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
-              <UIOrganism type="overview" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
-              <UIOrganism type="performance" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
-              <UIOrganism type="insights" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
-              <UIOrganism type="saved-models" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
-              <UIOrganism type="sortable-categories" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
-              <UIOrganism type="sortable-labs" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
-              <UIOrganism type="stats" data={{ categories: AI_CATEGORIES, featuredModels: FEATURED_MODELS }} />
-
+             
               {/* Trending Models */}
               <section class="container my-auto mx-auto p-4 mb-16">
                 <h2 class="text-2xl font-bold my-auto mb-6 text-light">
