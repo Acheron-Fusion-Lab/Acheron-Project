@@ -179,7 +179,7 @@ export const UIOrganism = component$<UIOrganismProps>(({
         <div class="py-2">
           <div class="grid grid-cols-1 md:grid-cols-4 gap-1 text-xs">
             <div>
-              <h3 class="font-bold">ModelMall.ai</h3>
+              <h3 class="font-bold">ModelMirror.ai</h3>
               <p class="text-gray-400">Discover the next AI you need.</p>
             </div>
             <div>
@@ -214,7 +214,7 @@ export const UIOrganism = component$<UIOrganismProps>(({
               <span class="font-bold">ModelMirror</span>
             </div>
             <nav class="flex space-x-4 text-gray-400">
-              <a href="#" class="hover:text-white">Models Data</a>
+              <a href="#" class="hover:text-white">Model's Data</a>
               <a href="#" class="hover:text-white">Dashboard</a>
               <a href="#" class="hover:text-white">Disruptors</a>
               <a href="#" class="hover:text-white">Visualizer</a>
@@ -235,7 +235,7 @@ export const UIOrganism = component$<UIOrganismProps>(({
       )}
 
       {type === 'hero' && (
-        <div class="py-16 relative pb-32">
+        <div class="py-16 relative pb-40 min-h-fit flex flex-col">
           {/* Categories Navigation */}
           <div class="overflow-x-auto no-scrollbar sticky top-0 z-20 bg-black">
             <div class="flex justify-center space-x-8 px-6 py-4 max-w-7xl mx-auto">
@@ -264,9 +264,9 @@ export const UIOrganism = component$<UIOrganismProps>(({
           </div>
 
           {/* Grid of Featured Models */}
-          <div class="relative z-10 grid grid-cols-4 md:grid-cols-4 lg:grid-cols-4 gap-8 max-w-7xl mx-auto px-4 pb-16">
+          <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto px-4 pb-16 mb-16">
             {FEATURED_MODELS?.map((item, index) => (
-              <div key={index} class="group bg-gray-50 rounded-2xl p-6 hover:shadow-md transition-shadow">
+              <div key={index} class="relative bg-gray-50 rounded-2xl p-6 hover:shadow-md transition-shadow">
                 {item.tag && (
                   <span class="inline-block px-3 py-1 text-xs font-medium bg-red-900 text-white rounded-full mb-4">
                     {item.tag}
