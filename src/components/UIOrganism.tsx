@@ -1,6 +1,7 @@
 // src/components/organisms/UIOrganism.tsx 
 import { component$, useSignal, $, HTMLAttributes, QwikJSX } from '@builder.io/qwik';
 import { FEATURED_MODELS, AI_CATEGORIES } from '~/mocks/data';
+import { CMCCheat } from './CMCCheat';
 import { UIAtom } from './UIAtom';
 import { UIFeature } from './UIFeatures';
 import { UIMolecule } from './UIMolecules';
@@ -9,7 +10,8 @@ import { UITemplate } from './UITemplates';
 
 interface UIOrganismProps {
   type:
-  | 'hero'
+  | 'hero1'
+  | 'hero2'
   | 'activity'
   | 'category-grid'
   | 'feedback'
@@ -71,6 +73,8 @@ type DataObject = {
   ctaLink?: string;
 };
 
+
+
 export const UIOrganism = component$<UIOrganismProps>(({
   type,
   data = [],
@@ -101,14 +105,40 @@ export const UIOrganism = component$<UIOrganismProps>(({
       currentPage.value = 1;
     }
   });
+  // Refs for scrollable containers
+  const categoriesRef = useSignal<HTMLElement>();
+  const modelsRef = useSignal<HTMLElement>();
 
+  // Drag-to-scroll signals for categories nav
+  const isDraggingCategories = useSignal(false);
+  const startXCategories = useSignal(0);
+  const scrollLeftCategories = useSignal(0);
+
+  // Drag-to-scroll signals for model cards
+  const isDraggingModels = useSignal(false);
+  const startXModels = useSignal(0);
+  const scrollLeftModels = useSignal(0);
+
+  // Helper function for button scrolling (ensuring container.scrollBy exists)
+  const scrollContainer = $((container: HTMLElement, direction: 'left' | 'right') => {
+    const scrollAmount = 200;
+    if (typeof container.scrollBy === 'function') {
+      container.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    } else {
+      // Fallback if scrollBy is not available
+      container.scrollLeft += direction === 'left' ? -scrollAmount : scrollAmount;
+    }
+  });
   // Fix 2, 3: Proper type checking for array operations
   const paginated = type === 'search-grid' && Array.isArray(data)
     ? data.slice((currentPage.value - 1) * 10, currentPage.value * 10)
     : data;
 
   return (
-    <div class={`p-2 ${type === 'header' || type === 'footer' ? 'bg-black text-white' : 'bg-gray-50'} rounded`}>
+    <div>
       {type === 'activity' && (
         <div class="space-y-1">
           {Array.isArray(data) && data.length ? data.map((item: any) => (
@@ -211,71 +241,171 @@ export const UIOrganism = component$<UIOrganismProps>(({
           </div>
         </div>
       )}
-
+      
       {type === 'header' && (
-        <div class="flex items-center justify-between px-4 py-2 bg-black text-white">
-          <div class="flex items-center space-x-4">
-            <div class="flex items-center space-x-2">
-              <span class="font-bold">ModelMirror</span>
-            </div>
-            <nav class="flex space-x-4 text-gray-400">
-              <a href="#" class="hover:text-white">Model's Data</a>
-              <a href="#" class="hover:text-white">Dashboard</a>
-              <a href="#" class="hover:text-white">Disruptors</a>
-              <a href="#" class="hover:text-white">Visualizer</a>
-              <a href="#" class="hover:text-white">Compare</a>
-              <a href="#" class="hover:text-white">More</a>
-            </nav>
-            <div class="flex items-center space-x-4">
-              <input
-                type="text"
-                placeholder="Search for AI Models, categories, AI labs..."
-                class="bg-gray-800 text-gray-300 px-3 py-1 rounded w-64 placeholder-gray-500"
-              />
-              <a href="#" class="text-gray-400 hover:text-white">Profile</a>
-              <a href="#" class="text-gray-400 hover:text-white">Saved</a>
-              <a href="#" class="text-gray-400 hover:text-white">Playground</a>
-              <a href="#" class="text-gray-400 hover:text-white">X</a>
-              <a href="#" class="text-gray-400 hover:text-white">Github</a>
-            </div>
+
+        <nav class="flex items-center justify-between text-white space-x-5">
+          <span>
+            <a href="#" class="text-xl font-bold hover:text-white pl-5">ModelMirror</a>
+          </span>
+          <div class="flex items-center justify-between space-x-5">
+            <a href="#" class="hover:text-white">Stats</a>
+            <a href="#" class="hover:text-white">Dashboard</a>
+            <a href="#" class="hover:text-white">Disruptors</a>
+            <a href="#" class="hover:text-white">Visualizer</a>
+            <a href="#" class="hover:text-white">Compare</a>
+            <a href="#" class="hover:text-white">More</a>
           </div>
+          <input
+            type="text"
+            placeholder="Search for AI Models, categories, AI labs..."
+            class="bg-gray-800 text-gray-300 px-3 py-1 rounded w-64 placeholder-gray-500"
+          />
+          <div class="flex items-center justify-between space-x-5">
+            <a href="#" class="hover:text-white">Profile</a>
+            <a href="#" class="hover:text-white">Saved</a>
+            <a href="#" class="hover:text-white">Playground</a>
+            <a href="#" class="hover:text-white">X</a>
+            <a href="#" class="hover:text-white pr-10">Github</a>
+          </div>
+        </nav>
+
+      )}
+      
+      {type === 'hero1' && (
+        <div class="">
+          <h1 class="text-white text-8xl">
+            Everything<br></br> About <br></br><span class="">AI Models</span>
+          </h1>
         </div>
       )}
-
-      {type === 'hero' && (
+      
+      {type === 'hero2' && (
         <div class="py-16 relative pb-32 bg-black flex flex-col">
-          {/* Categories Navigation */}
-          <div class="overflow-x-auto no-scrollbar sticky top-0 z-20">
-            <div class="flex justify-center space-x-8 px-6 py-4 max-w-7xl mx-auto">
-              {AI_CATEGORIES?.map((category) => (
-                <a
-                  key={category.id}
-                  href={category.link}
-                  class="flex flex-col items-center group min-w-[64px] hover:opacity-100 opacity-90 transition-opacity"
-                >
-                  <div class="w-12 h-12 mb-2 rounded-2xl flex items-center justify-center">
-                    <img
-                      src={category.icon}
-                      alt={category.name}
-                      class="w-8 h-8 object-contain"
-                    />
-                  </div>
-                  <span class="text-xs font-medium text-white">{category.name}</span>
-                </a>
-              ))}
+          {/* Categories Navigation with fixed-position buttons */}
+          <div class="relative">
+            <div
+              ref={categoriesRef}
+              class="overflow-x-auto no-scrollbar"
+              style={{
+                scrollBehavior: 'auto',
+                cursor: isDraggingCategories.value ? 'grabbing' : 'grab',
+                userSelect: isDraggingCategories.value ? 'none' : 'auto'
+              }}
+              onMouseDown$={(e) => {
+                isDraggingCategories.value = true;
+                startXCategories.value = e.pageX - (categoriesRef.value?.getBoundingClientRect().left ?? 0);
+                scrollLeftCategories.value = categoriesRef.value?.scrollLeft ?? 0;
+              }}
+              onMouseLeave$={() => { isDraggingCategories.value = false; }}
+              onMouseUp$={() => { isDraggingCategories.value = false; }}
+              onMouseMove$={(e) => {
+                if (!isDraggingCategories.value) return;
+                e.preventDefault();
+                const x = e.pageX - (categoriesRef.value?.getBoundingClientRect().left ?? 0);
+                const walk = x - startXCategories.value; // direct scrolling
+                if (categoriesRef.value) {
+                  categoriesRef.value.scrollLeft = scrollLeftCategories.value - walk;
+                }
+              }}
+              onTouchStart$={(e) => {
+                isDraggingCategories.value = true;
+                startXCategories.value = e.touches[0].pageX - (categoriesRef.value?.getBoundingClientRect().left ?? 0);
+                scrollLeftCategories.value = categoriesRef.value?.scrollLeft ?? 0;
+              }}
+              onTouchEnd$={() => { isDraggingCategories.value = false; }}
+              onTouchMove$={(e) => {
+                if (!isDraggingCategories.value) return;
+                const x = e.touches[0].pageX - (categoriesRef.value?.getBoundingClientRect().left ?? 0);
+                const walk = x - startXCategories.value;
+                if (categoriesRef.value) {
+                  categoriesRef.value.scrollLeft = scrollLeftCategories.value - walk;
+                }
+              }}
+            >
+              <div class="flex justify-center space-x-8 px-6 py-4 max-w-7xl mx-auto">
+                {AI_CATEGORIES?.map((category) => (
+                  <a
+                    key={category.id}
+                    href={category.link}
+                    class="flex flex-col items-center group min-w-[64px] hover:opacity-100 opacity-90 transition-opacity"
+                  >
+                    <div class="bg-white w-12 h-12 mb-2 rounded-2xl flex items-center justify-center">
+                      <img
+                        src={category.icon}
+                        alt={category.name}
+                        class="w-8 h-8 object-contain"
+                      />
+                    </div>
+                    <span class="text-xs font-medium text-white text-center">
+                      {category.name}
+                    </span>
+                  </a>
+                ))}
+              </div>
             </div>
+            {/* Fixed Navigation Buttons for Categories */}
+            <button
+              onClick$={() => categoriesRef.value && scrollContainer(categoriesRef.value, 'left')}
+              class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-sm hover:bg-gray-200 transition-colors text-gray-800 z-30 text-sm"
+            >
+              ◀
+            </button>
+            <button
+              onClick$={() => categoriesRef.value && scrollContainer(categoriesRef.value, 'right')}
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-sm hover:bg-gray-200 transition-colors text-gray-800 z-30 text-sm"
+            >
+              ▶
+            </button>
           </div>
 
           {/* Centered Headline */}
           <div class="text-center mb-6 mt-16">
-            <h1 class="text-3xl font-bold text-white">Discover the latest AI models.</h1>
+            <h1 class="text-3xl font-bold text-white">
+              Discover the latest AI models.
+            </h1>
           </div>
 
-          {/* Horizontal Scrolling Model Cards with Navigation */}
+          {/* Model Cards Section with spacing restored */}
           <div class="relative z-10 max-w-7xl mx-auto px-4 pb-16">
             <div
-              class="flex overflow-x-auto no-scrollbar space-x-4"
-              style={{ scrollBehavior: 'smooth' }}
+              ref={modelsRef}
+              class="flex overflow-x-auto no-scrollbar cursor-grab space-x-4"
+              style={{
+                scrollBehavior: 'auto',
+                cursor: isDraggingModels.value ? 'grabbing' : 'grab',
+                userSelect: isDraggingModels.value ? 'none' : 'auto'
+              }}
+              onMouseDown$={(e) => {
+                isDraggingModels.value = true;
+                startXModels.value = e.pageX - (modelsRef.value?.getBoundingClientRect().left ?? 0);
+                scrollLeftModels.value = modelsRef.value?.scrollLeft ?? 0;
+              }}
+              onMouseLeave$={() => { isDraggingModels.value = false; }}
+              onMouseUp$={() => { isDraggingModels.value = false; }}
+              onMouseMove$={(e) => {
+                if (!isDraggingModels.value) return;
+                e.preventDefault();
+                const x = e.pageX - (modelsRef.value?.getBoundingClientRect().left ?? 0);
+                const walk = x - startXModels.value;
+                if (modelsRef.value) {
+                  modelsRef.value.scrollLeft = scrollLeftModels.value - walk;
+                }
+              }}
+              onTouchStart$={(e) => {
+                isDraggingModels.value = true;
+                startXModels.value = e.touches[0].pageX - (modelsRef.value?.getBoundingClientRect().left ?? 0);
+                scrollLeftModels.value = modelsRef.value?.scrollLeft ?? 0;
+              }}
+              onTouchEnd$={() => { isDraggingModels.value = false; }}
+              onTouchMove$={(e) => {
+                if (!isDraggingModels.value) return;
+                const x = e.touches[0].pageX - (modelsRef.value?.getBoundingClientRect().left ?? 0);
+                const walk = x - startXModels.value;
+                if (modelsRef.value) {
+                  modelsRef.value.scrollLeft = scrollLeftModels.value - walk;
+                }
+              }}
             >
               {FEATURED_MODELS?.map((item, index) => (
                 <div
@@ -287,7 +417,9 @@ export const UIOrganism = component$<UIOrganismProps>(({
                       {item.tag}
                     </span>
                   )}
-                  <h2 class="text-2xl font-semibold text-gray-900 mb-2">{item.headline}</h2>
+                  <h2 class="text-2xl font-semibold text-gray-900 mb-2">
+                    {item.headline}
+                  </h2>
                   <p class="text-sm text-gray-600 mb-2">{item.subheadline}</p>
                   {item.price && (
                     <p class="text-sm text-gray-500 mb-4">{item.price}</p>
@@ -295,7 +427,7 @@ export const UIOrganism = component$<UIOrganismProps>(({
                   <img
                     src={item.image}
                     alt={item.headline}
-                    class="w-full h-48 object-contain transform group-hover:scale-105 transition-transform duration-300"
+                    class="w-full h-48 object-contain transform group-hover:scale-105 transition-transform duration-150"
                   />
                   <a
                     href={item.ctaLink}
@@ -306,17 +438,18 @@ export const UIOrganism = component$<UIOrganismProps>(({
                 </div>
               ))}
             </div>
-
-            {/* Navigation Buttons */}
+            {/* Fixed Navigation Buttons for Model Cards */}
             <button
-              class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-md hover:bg-gray-200 transition-colors text-gray-800"
+              onClick$={() => modelsRef.value && scrollContainer(modelsRef.value, 'left')}
+              class="absolute left-2 top-[calc(50%-16px)] bg-white p-2 rounded-full shadow-sm hover:bg-gray-200 transition-colors text-gray-800 z-30 text-sm"
             >
-              ◀ {/* Left Arrow */}
+              ◀
             </button>
             <button
-              class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-md hover:bg-gray-200 transition-colors text-gray-800"
+              onClick$={() => modelsRef.value && scrollContainer(modelsRef.value, 'right')}
+              class="absolute right-2 top-[calc(50%-16px)] bg-white p-2 rounded-full shadow-sm hover:bg-gray-200 transition-colors text-gray-800 z-30 text-sm"
             >
-              ▶ {/* Right Arrow */}
+              ▶
             </button>
           </div>
         </div>
